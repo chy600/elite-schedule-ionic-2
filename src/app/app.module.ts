@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { IonicApp, IonicModule } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 import { MyApp } from './app.component';
 import { MyTeamsPage, GamePage, TeamDetailPage, TeamsPage, TournamentsPage, TeamHomePage, StandingsPage } from '../pages/pages';
@@ -29,6 +30,8 @@ import { MyTeamsPage, GamePage, TeamDetailPage, TeamsPage, TournamentsPage, Team
     TeamHomePage,
     StandingsPage
   ],
-  providers: []
+  providers: [
+    Storage
+  ]
 })
 export class AppModule {}

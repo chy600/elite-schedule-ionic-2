@@ -1,22 +1,32 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
-/*
-  Generated class for the Standings page.
+import { EliteApi } from '../../shared/shared';
+import _ from 'lodash';
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: 'page-standings',
   templateUrl: 'standings.html'
 })
 export class StandingsPage {
+  allStandings: any[];
+  standings: any[];
+  team: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+  constructor(private navCtrl: NavController, 
+              private navParams: NavParams,
+              private eliteApi: EliteApi) {}
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad StandingsPage');
+  ionViewWillLoad() {
+    this.team = this.navParams.data;
+    let tourneyData = this.eliteApi.getCurrentTourney();
+    this.standings = tourneyData.standings;
+
+    this.allStandings = _.chain(this.standings)
+      .groupBy('division')
+      .toPairs()
+      .map(item => _.zipObject(['divisionName', 'divisionStandings'], item))
+      .value();
   }
 
 }
