@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, Nav } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
-import { HttpModule } from '@angular/http';
 
 import { MyTeamsPage, TournamentsPage } from '../pages/pages';
 import { EliteApi, UserSettings } from '../shared/shared';
@@ -9,7 +8,6 @@ import { EliteApi, UserSettings } from '../shared/shared';
 @Component({
   templateUrl: 'app.html',
   providers: [
-    HttpModule,
     EliteApi,
     UserSettings
   ]
