@@ -115,4 +115,12 @@ export class TeamDetailPage {
       this.userSettings.favoriteTeam(this.team, this.tourneyData.tournament.id, this.tourneyData.tournament.name);
     }
   }
+
+  refreshTeamDetails(refresher) {
+    this.eliteApi.refreshCurrentTourney()
+      .subscribe(() => {
+        this.ionViewWillLoad();
+        refresher.complete();
+      });
+  }
 }

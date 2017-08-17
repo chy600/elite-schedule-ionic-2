@@ -14,10 +14,12 @@ export class TeamsPage {
 	private allTeams: any;
 	private allTeamDivisions: any;
 	teams = [];
+	private searchQuery: string;
+	private filteredTeams: any[] = [];
 
 	constructor(private navCtrl: NavController,
               private navParams: NavParams,
-			  private loadingCtrl: LoadingController,
+			  			private loadingCtrl: LoadingController,
               private eliteApi: EliteApi) {}
 
 	ionViewWillLoad() {
@@ -29,19 +31,35 @@ export class TeamsPage {
 		loader.present().then(() => {
 			this.eliteApi.getTournamentData(selectedTourney.id).subscribe(data => {
 				this.allTeams = data.teams;
-				this.allTeamDivisions = _.chain(data.teams)
-						.groupBy('division')
-						.toPairs()
-						.map(item => _.zipObject(['divisionName', 'divisionTeams'], item))
-						.value();
-				this.teams = this.allTeamDivisions;
+				this.filteredTeams = this.allTeams;
+				this.processTeamsData();
 				loader.dismiss();
 			});
 		});
 	}
 
+	private processTeamsData() {
+		this.allTeamDivisions = _.chain(this.filteredTeams)
+			.groupBy('division')
+			.toPairs()
+			.map(item => _.zipObject(['divisionName', 'divisionTeams'], item))
+			.value();
+		this.teams = this.allTeamDivisions;
+	}
+
 	itemTapped($event, team) {
 		this.navCtrl.push(TeamHomePage, team);
+	}
+
+	filterTeams(ev: any) {
+		this.filteredTeams = this.allTeams;
+    // if the value is an empty string don't filter the teams
+    if (this.searchQuery && this.searchQuery.trim() != '') {
+      this.filteredTeams = this.allTeams.filter((team) => {
+        return (team.name.toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1);
+			});
+    }
+		this.processTeamsData();
 	}
 
 }
